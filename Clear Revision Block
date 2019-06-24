@@ -1,0 +1,28 @@
+;;; Design Plus Inc 
+;;; Tip: Clear_revision_from_Title.lsp	clearatts	(c) 2019 Chris Miske 
+;;; Select the block for the revisions on the title block and automatically resets the block. Used mostly for when copying drawing sets from other projects that have revisions.
+;;; June/2019
+
+(defun c:ClearAtts(/ tags ss i obj lstatts)
+	(progn
+	(setq tags (list "DESCRIPTION_E" "DATE_E" "TAG_E" "DESCRIPTION_D" "DATE_D" "TAG_D" "DESCRIPTION_C" "DATE_C" "TAG_C" "DESCRIPTION_B" "DATE_B" "TAG_B" "DESCRIPTION_A" "DATE_A" "TAG_A" "INITIALS_A" "INITIALS_B"))	
+	(setq 
+		ss (ssget)
+		i 0
+	)	
+	(repeat (sslength ss)
+	(setq 
+		obj (vlax-EName->vla-Object (ssname ss i))
+		lstatts (vlax-SafeArray->list (variant-Value (vla-GetAttributes obj)))
+	)
+	(foreach atts lstatts (if (member (vla-Get-TagString atts) tags)(vla-put-textstring atts "")))
+	(setq i (1+ i))
+	)
+	)
+)
+
+;;; Design Plus Inc 
+;;; Tip: Change_Light_Att.lsp	chlite	(c) 2019 Chris Miske 
+;;; Select lighitng block (individual or multiple), enter the new letter for the attribulte, and changes all the attribultes in the selection.
+;;; June/2019
+
