@@ -1,0 +1,22 @@
+(defun c:chlite(/ lite1 tags ss i obj lstatts)
+	(progn
+	(setq tags (list "STATE", "STATE1"))	
+	(setq 
+		ss (ssget)
+		i 0
+	)
+	(setq lite1 (getstring "\nLight/D for Demo/N for new/R for relocate/E for Existing: "))	
+	(repeat (sslength ss)
+	(setq 
+		obj (vlax-EName->vla-Object (ssname ss i))
+		lstatts (vlax-SafeArray->list (variant-Value (vla-GetAttributes obj)))
+	)
+	(foreach atts lstatts
+		(if
+			(member (vla-Get-TagString atts) tags)
+			(vla-put-textstring atts (strcat "("lite1")" )))
+		)
+	(setq i (1+ i))
+	)
+	)
+)
